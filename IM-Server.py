@@ -25,4 +25,4 @@ class Server():
 		while True:
 			
 			#Listen for clients, and create a ClientThread for each new client
-			print "Listening for more clients" 
+			print "Listening for more clients"  
