@@ -26,3 +26,13 @@ class Server():
 			
 			#Listen for clients, and create a ClientThread for each new client
 			print "Listening for more clients"  
+			
+			try:
+				(client_socket, client_adress) = self.listener.accept()
+				
+			except socket.error:
+				sys.exit("Could not accept any more connections")
+				
+				self.client_sockets.append(client_socket)
+				
+				print ""
