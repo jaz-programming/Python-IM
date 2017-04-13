@@ -91,7 +91,7 @@ class MainWindow(gtk.Window):
 		new_text = self.text_entry.get_text()
 		self.text_entry.set_text("")
 		message = "{0} says: {1}\n".format(self.username, new_text)
-		self.network.self(message)
+		self.network.send(message)
 	
 	def graceful_quit(self, widget):
 		#When the application is closed tell GTK to quit, then tell the server we are quitting and tidy up the network
