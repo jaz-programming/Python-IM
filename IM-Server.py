@@ -28,7 +28,7 @@ class Server():
 			print "Listening for more clients"  
 			
 			try:
-				(client_socket, client_adress) = self.listener.accept()
+				(client_socket, client_address) = self.listener.accept()
 				
 			except socket.error:
 				sys.exit("Could not accept any more connections")
