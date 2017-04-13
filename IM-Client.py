@@ -18,8 +18,8 @@ class MainWindow(gtk.Window):
 		
 		#Create controls
 		self.set_title("IM Client")
-		vbox = gtk.Vbox()
-		hbox = gtk.Hbox()
+		vbox = gtk.VBox()
+		hbox = gtk.HBox()
 		self.username_label = gtk.Label()
 		self.text_entry = gtk.Entry()
 		send_button = gtk.Button("Send")
