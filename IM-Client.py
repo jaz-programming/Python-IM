@@ -113,7 +113,7 @@ class Networking():
 		
 	def listener(self):
 		#A function run as a thread that listens for new messages
-		while self.listening():
+		while self.listening:
 			data = ""
 			try:
 				data = self.socket.recv(1024)
