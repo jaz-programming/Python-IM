@@ -16,7 +16,7 @@ class Server():
 		print "Listening on port {0}".format(port)
 		
 		#Used to store all of the client sockets we have, for echoing to them
-		self.client_sockets = []
+		self.client_sockets = ['127.0.0.1:57053',]
 		
 		#Run the function self.signal_handler when Ctrl+C is pressed
 		signal.signal(signal.SIGTERM, self.signal_handler)
@@ -76,6 +76,20 @@ class ClientListener(threading.Thread):
 		self.socket = socket
 		self.listening = True
 		self.username = "No Username"
+	
+	def run(self):
+		
+		while self.listening:
+			data = ""
+			try:
+				data = self.socket.recv(1024)
+				
+			except socket.error:
+				print "Unable to recieve data"
+				
+			self.handle_msg(data)
+			time.sleep(0.1)
+		print "Ending client thread for {0}".format(self.address)	
 		
 	def handle_msg(self, data):
 		#Print and then process the message we've just recieved

@@ -46,6 +46,7 @@ class MainWindow(gtk.Window):
 		
 		#Go through the configuration process
 		self.configure()
+	
 	def ask_for_info(self, question):
 		#Shows a message box with a text entry and returns the response
 		dialog = gtk.MessageDialog(parent = self, type = gtk.MESSAGE_QUESTION, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, buttons = gtk.BUTTONS_OK_CANCEL, message_format = question)
@@ -55,6 +56,7 @@ class MainWindow(gtk.Window):
 		response = dialog.run()
 		response_text = entry.get_text()
 		dialog.destroy()
+		
 		if response == gtk.RESPONSE_OK:
 			return response_text
 		else:
@@ -68,6 +70,8 @@ class MainWindow(gtk.Window):
 		regex = re.search('^(\d+\.\d+\.\d+\.\d+):(\d+)$', server)
 		address = regex.group(1).strip()
 		port = regex.group(2).strip()
+		print address
+		print port
 		#Ask for a username
 		self.username = self.ask_for_info("username")
 		self.username_label.set_text(self.username)
@@ -118,7 +122,7 @@ class Networking():
 			try:
 				data = self.socket.recv(1024)
 			except socket.error:
-				"Unable to recieve data"
+				print "Unable to recieve data"
 			
 			self.handle_msg(data)
 			
