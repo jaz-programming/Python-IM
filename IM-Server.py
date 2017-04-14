@@ -16,10 +16,11 @@ class Server():
 		print "Listening on port {0}".format(port)
 		
 		#Used to store all of the client sockets we have, for echoing to them
-		self.client_sockets = ['127.0.0.1:57053',]
+		self.client_sockets = []
 		
 		#Run the function self.signal_handler when Ctrl+C is pressed
-		signal.signal(signal.SIGTERM, self.signal_handler)
+		#signal.signal(signal.SIGTERM, self.signal_handler)
+		signal.signal(signal.SIGINT, self.signal_handler)
 	
 	def run(self):
 		while True:
@@ -31,7 +32,7 @@ class Server():
 				(client_socket, client_address) = self.listener.accept()
 				
 			except socket.error:
-				sys.exit("Could not accept any more connections")
+				pass #sys.exit("Could not accept any more connections")
 				
 			self.client_sockets.append(client_socket)
 				
@@ -45,12 +46,13 @@ class Server():
 		#Send a message to each socket in self.client_socket
 		
 		print "echoing: {0}".format(data)
+		
 		for socket in self.client_sockets:
 			#Try and echo to all clients
 			try:
 				socket.sendall(data)
 			except socket.error:
-				print "Unable to send message"
+				print "Unable to send message\n"
 				
 				
 	def remove_socket(self, socket):
@@ -59,11 +61,17 @@ class Server():
 	
 	def signal_handler(self, signal, frame):
 		#Run when Ctrl+C is pressed
-		print "Tidying up"
+		self.cleanup()
+
+	def cleanup(self):
+		print "\n\nTidying up"
 		#Stop listening for new connections
 		self.listener.close()
 		#Let each client know we are quitting
+		print
 		self.echo("QUIT")
+		sys.exit()
+		
 		
 class ClientListener(threading.Thread):
 	def __init__(self, server, socket, address):
@@ -90,6 +98,13 @@ class ClientListener(threading.Thread):
 			self.handle_msg(data)
 			time.sleep(0.1)
 		print "Ending client thread for {0}".format(self.address)	
+		
+	def quit(self):
+		#Tidy up and end the thread
+		self.listening = False
+		self.socket.close()
+		self.server.remove_socket(self.socket)
+		self.server.echo("{0} has quit.\n".format(self.username))
 		
 	def handle_msg(self, data):
 		#Print and then process the message we've just recieved
